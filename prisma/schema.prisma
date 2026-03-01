@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Appeal {
+  id       String        @id
+  category String
+  status   String
+  message  String
+  children AppealChild[]
+}
+
+model AppealChild {
+  id        String @id
+  appealId  String
+  childIin  String
+  childName String
+  appeal    Appeal @relation(fields: [appealId], references: [id], onDelete: Cascade)
+
+  @@index([appealId])
+  @@index([childIin])
+}
+
+model Enrollment {
+  id               String @id
+  athleteProfileId String
+  sportsCenterId   String
+  programId        String
+  status           String
+  parent           String
+
+  athleteProfile AthleteProfile      @relation(fields: [athleteProfileId], references: [id], onDelete: Cascade)
+  program        SportsCenterProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@index([athleteProfileId])
+  @@index([sportsCenterId])
+  @@index([programId])
+  @@index([status])
+}
+
+model SportsCenterProgram {
+  id             String       @id
+  sportsCenterId String
+  sportType      String
+  capacity       Int
+  enrollments    Enrollment[]
+}
+
+model AthleteProfile {
+  id          String       @id
+  iin         String       @unique
+  enrollments Enrollment[]
+}

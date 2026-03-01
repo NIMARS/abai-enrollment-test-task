@@ -1,0 +1,8 @@
+prisma/generated/prisma
+
+.env
+node_modules
+dist
+.env.test
+coverage
+mytest.txt
